@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"time"
 )
 
 var app *App
@@ -27,7 +28,7 @@ func (app *App) startup(ctx context.Context) {
 }
 
 // Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
+func (app *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
@@ -53,4 +54,40 @@ func (app *App) updateRemoteVault() {
 		// TODO: Have better error interface for vault updates (error, network error, no data, vault data)
 		app.client.updateData([]byte(jsonData), lastUpdated)
 	}
+}
+
+func (app *App) onDomReady(ctx context.Context) {
+	go func() {
+		// Wait 200ms for all the JS to load before making requests to it
+		// TODO: Get rid of this hack
+		// IF 200MS IS NOT ENOUGH THIS REQUIRES A REFACTOR, DON'T INCREASE
+		time.Sleep(200 * time.Millisecond)
+		app.initializeData()
+	}()
+}
+
+func (app *App) initializeData() {
+	vaultFile := readVaultFromFile()
+	if vaultFile == nil {
+		// Create new vault
+		app.createNewVault()
+	} else {
+		// Existing vault
+		if vaultFile.Favicons != nil {
+			importFaviconCache(vaultFile.Favicons)
+		}
+		eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
+		if !eject {
+			// 1. Logged in locally or remotely
+			app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
+			if vaultFile.VaultType == accountVaultType {
+				go app.updateRemoteVault()
+			}
+		} else {
+			// 2. Eject and create new vault
+			deleteVaultFile()
+			app.createNewVault()
+		}
+	}
+	go startFIDOServer(app.client.fidoClient)
 }

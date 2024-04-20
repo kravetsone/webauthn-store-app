@@ -21,8 +21,13 @@ func approveClientAction(action string, relyingParty string, userName string) bo
 }
 
 func logIn(vaultType string, vaultData string, email string) bool {
+	println(vaultType, vaultData, email)
+
+	// response := false
 	response := callRPC(app.ctx, "logIn", vaultType, vaultData, email)
+	println(response)
 	return response.(bool)
+	// return false
 }
 
 func createNewVault() (string, bool) {

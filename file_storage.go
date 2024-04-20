@@ -29,6 +29,7 @@ func vaultFilename() string {
 
 func configFilePath(filename string) string {
 	configDir := configDir()
+	print(229, configDir)
 	return filepath.Join(configDir, filename)
 }
 

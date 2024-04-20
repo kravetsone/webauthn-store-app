@@ -11,6 +11,8 @@ import (
 var rpcResponseId int32 = 0
 
 func callRPC(ctx context.Context, name string, args ...interface{}) interface{} {
+	println("GO -> JS: %s(%v) -> %v\n", name, args)
+
 	responseId := strconv.Itoa(int(atomic.AddInt32(&rpcResponseId, 1)))
 	responseChan := make(chan interface{})
 	responseHandler := func(data ...interface{}) {
@@ -20,7 +22,7 @@ func callRPC(ctx context.Context, name string, args ...interface{}) interface{} 
 	data := append([]interface{}{responseId}, args...)
 	runtime.EventsEmit(ctx, name+"-request", data)
 	response := <-responseChan
-	debugf("GO -> JS: %s(%v) -> %v\n", name, args, response)
+	println("GO -> JS: %s(%v) -> %v\n", name, args, response)
 	return response
 }
 
