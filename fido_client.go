@@ -6,6 +6,7 @@ import (
 	"crypto/rand"
 	"crypto/x509"
 	"crypto/x509/pkix"
+	"fmt"
 	"math/big"
 
 	vfido_crypto "github.com/bulwarkid/virtual-fido/crypto"
@@ -48,8 +49,8 @@ func (client *FIDOClient) configureNewClient() {
 	authority := &x509.Certificate{
 		SerialNumber: big.NewInt(0),
 		Subject: pkix.Name{
-			Organization: []string{"Bulwark Passkey"},
-			Country:      []string{"US"},
+			Organization: []string{"VK"},
+			Country:      []string{"RU"},
 		},
 		NotBefore:             now(),
 		NotAfter:              now().AddDate(10, 0, 0),
@@ -79,6 +80,7 @@ func (client *FIDOClient) loadConfig(config *identities.FIDODeviceConfig) {
 	checkErr(err, "Could not parse private key")
 	client.authenticationCounter = config.AuthenticationCounter
 	client.certificateAuthority = cert
+	fmt.Printf("PRIVAT %+v\n", privateKey)
 	client.certPrivateKey = privateKey
 	client.encryptionKey = config.EncryptionKey
 	client.pinHash = config.PINHash
@@ -87,6 +89,9 @@ func (client *FIDOClient) loadConfig(config *identities.FIDODeviceConfig) {
 }
 
 func (client *FIDOClient) exportConfig() *identities.FIDODeviceConfig {
+	println(client)
+	fmt.Printf("CLIE %+v\n", client)
+	fmt.Printf("certPrivateKey %+v\n", client.certPrivateKey)
 	privateKey, err := x509.MarshalECPrivateKey(client.certPrivateKey)
 	checkErr(err, "Could not encode private key")
 	config := identities.FIDODeviceConfig{
@@ -142,7 +147,7 @@ func (client *FIDOClient) CreateAttestationCertificiate(privateKey *ecdsa.Privat
 		SerialNumber: big.NewInt(0),
 		Subject: pkix.Name{
 			Organization:       []string{"Self-Signed Virtual FIDO"},
-			Country:            []string{"US"},
+			Country:            []string{"RU"},
 			CommonName:         "Self-Signed Virtual FIDO",
 			OrganizationalUnit: []string{"Authenticator Attestation"},
 		},

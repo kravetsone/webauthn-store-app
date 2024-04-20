@@ -24,7 +24,7 @@ func main() {
 	checkErr(err, "Could not create main log file")
 	defer logFile.Close()
 	consoleLogger := &Logger{log: log.New(logFile, "", 0)}
-
+	consoleLogger.Debug("TEST!!")
 	// Create application with options
 	err = wails.Run(&options.App{
 		Title:  "webauthn-store",

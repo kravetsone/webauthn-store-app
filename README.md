@@ -14,3 +14,6 @@ to this in your browser, and you can call your Go code from devtools.
 ## Building
 
 To build a redistributable, production mode package, use `wails build`.
+
+./usbip/usbip.exe install -u
+./usbip/usbip.exe attach -r 127.0.0.1 -b 2-2

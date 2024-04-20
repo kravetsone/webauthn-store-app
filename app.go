@@ -35,18 +35,21 @@ func (app *App) Greet(name string) string {
 
 func (app *App) createNewVault() {
 	vaultType, loggedIn := createNewVault()
-	if loggedIn {
-		// Fetch remote vault
-		jsonData, lastUpdated := fetchRemoteVaultJSON()
-		if jsonData == "" {
-			// Fetch returned no vault on remote servers
-			app.client.configureNewDevice(accountVaultType)
-		} else {
-			app.client.loadData(accountVaultType, []byte(jsonData), lastUpdated, getUserEmail())
-		}
-	} else {
-		app.client.configureNewDevice(vaultType)
-	}
+	println(vaultType, loggedIn)
+	app.client.configureNewDevice(vaultType)
+
+	// if loggedIn {
+	// 	// Fetch remote vault
+	// 	jsonData, lastUpdated := fetchRemoteVaultJSON()
+	// 	if jsonData == "" {
+	// 		// Fetch returned no vault on remote servers
+	// 		app.client.configureNewDevice(accountVaultType)
+	// 	} else {
+	// 		app.client.loadData(accountVaultType, []byte(jsonData), lastUpdated, getUserEmail())
+	// 	}
+	// } else {
+	// 	app.client.configureNewDevice(vaultType)
+	// }
 }
 
 func (app *App) updateRemoteVault() {
@@ -70,35 +73,37 @@ func (app *App) onDomReady(ctx context.Context) {
 func (app *App) initializeData() {
 	vaultFile := readVaultFromFile()
 	println("SOME 71")
-	if vaultFile == nil {
-		println("SOME 73")
-		// Create new vault
-		app.createNewVault()
-	} else {
-		println("SOME 77")
-		// // Existing vault
-		// if vaultFile.Favicons != nil {
-		// 	importFaviconCache(vaultFile.Favicons)
-		// }
-		// eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
-		// if !eject {
-		// 	// 1. Logged in locally or remotely
-		// 	app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
-		// 	println("SOME 84")
+	fmt.Printf("VAULT %+v\n", vaultFile)
+	// if vaultFile == nil {
+	// 	println("SOME 73")
+	// 	// Create new vault
+	// 	app.createNewVault()
+	// } else {
+	// 	println("SOME 77")
+	// 	// // Existing vault
+	// 	if vaultFile.Favicons != nil {
+	// 		importFaviconCache(vaultFile.Favicons)
+	// }
+	// eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
+	// if !eject {
+	// 	// 1. Logged in locally or remotely
+	// 	app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
+	// 	println("SOME 84")
 
-		// 	if vaultFile.VaultType == accountVaultType {
-		// 		println("SOME 89")
+	// 	if vaultFile.VaultType == accountVaultType {
+	// 		println("SOME 89")
 
-		// 		go app.updateRemoteVault()
-		// 	}
-		// } else {
-		// 	println("SOME 92")
+	// 		go app.updateRemoteVault()
+	// 	}
+	// } else {
+	// 	println("SOME 92")
 
-		// 	// 2. Eject and create new vault
-		// 	deleteVaultFile()
-		// 	app.createNewVault()
-		// }
-	}
+	// 	// 2. Eject and create new vault
+	// 	deleteVaultFile()
+	// 	app.createNewVault()
+	// }
+	// }
+
 	println("SOME startFIDOServer")
 
 	go startFIDOServer(app.client.fidoClient)

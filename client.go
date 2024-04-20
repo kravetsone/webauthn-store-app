@@ -48,6 +48,7 @@ func (client *Client) passphraseChanged() {
 }
 
 func (client *Client) configureNewDevice(vaultType string) {
+	println(228, vaultType)
 	client.fidoClient.configureNewClient()
 	client.vaultType = vaultType
 	client.lastUpdated = now()
@@ -161,6 +162,7 @@ func decryptSavedState(data []byte, passphrase string) (*ClientSavedState, error
 func (client *Client) exportSavedState() []byte {
 	config := client.fidoClient.exportConfig()
 	encryptedConfig, err := identities.EncryptFIDOState(*config, client.passphrase())
+	checkErr(err, "Could not")
 	state := ClientSavedState{
 		VirtualFIDOConfig: encryptedConfig,
 		DeletedSources:    client.deletedSources,
@@ -173,15 +175,16 @@ func (client *Client) exportSavedState() []byte {
 }
 
 func (client *Client) save() {
-	config := client.exportSavedState()
+	// config := client.exportSavedState()
+	config := []byte{}
 	vaultFile := VaultFile{VaultType: client.vaultType, Email: client.email, Data: config, LastUpdated: toTimestamp(client.lastUpdated)}
 	favicons, err := exportFaviconCache()
 	if err == nil {
 		vaultFile.Favicons = favicons
 	}
-	saveVaultToFile(vaultFile)
-	updateFrontend()
-	storeRemoteVaultJSON(string(config), toTimestamp(client.lastUpdated))
+	// saveVaultToFile(vaultFile)
+	// updateFrontend()
+	// storeRemoteVaultJSON(string(config), toTimestamp(client.lastUpdated))
 }
 
 // --------------------------

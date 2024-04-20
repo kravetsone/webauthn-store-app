@@ -20,7 +20,7 @@ type VaultFile struct {
 func configDir() string {
 	configDirRoot, err := os.UserConfigDir()
 	checkErr(err, "Could not get user config directory")
-	return filepath.Join(configDirRoot, "Bulwark Passkey")
+	return filepath.Join(configDirRoot, "webauthn-store-dev.exe")
 }
 
 func vaultFilename() string {

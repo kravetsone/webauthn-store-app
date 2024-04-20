@@ -16,8 +16,9 @@ func updateFrontend() {
 }
 
 func approveClientAction(action string, relyingParty string, userName string) bool {
-	response := callRPC(app.ctx, "approveClientAction", action, relyingParty, userName)
-	return response.(bool)
+	return true
+	// response := callRPC(app.ctx, "approveClientAction", action, relyingParty, userName)
+	// return response.(bool)
 }
 
 func logIn(vaultType string, vaultData string, email string) bool {
@@ -31,9 +32,11 @@ func logIn(vaultType string, vaultData string, email string) bool {
 }
 
 func createNewVault() (string, bool) {
+	println("ITS A JOKE")
 	// 1st arg: vault type of new vault
 	// 2nd arg: if true, logged into remote vault instead of creating new one
 	response := callRPC(app.ctx, "createNewVault").([]interface{})
+	println("result", response[0].(string), response[1].(bool))
 	return response[0].(string), response[1].(bool)
 }
 

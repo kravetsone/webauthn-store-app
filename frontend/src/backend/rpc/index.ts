@@ -1,39 +1,54 @@
-import { LogDebug } from "wailsjs/runtime/runtime";
-import { registerHandler,  } from "../utils";
-import {getPassphrase} from "../../utils/passphrase"
-// import * as identities from "../data/identities";
-// import { approveClientAction } from "./ApproveAction";
-// import { createNewVault } from "./signup/CreateAccount";
-// import { getPassphrase } from "../data/passphrase";
-// import { logInToExistingVault } from "./signup/LogIn";
-// import * as supabase from "../data/supabase";
-// import { LogError } from "../wailsjs/runtime/runtime";
+import { LogDebug, LogError } from "wailsjs/runtime/runtime";
+import { update } from "../../utils/identities";
+import {
+	ACCOUNT_VAULT_TYPE,
+	LOCAL_VAULT_TYPE,
+	getPassphrase,
+} from "../../utils/passphrase";
+import { registerHandler } from "../utils";
 
-// registerHandler("approveClientAction", approveClientAction);
+registerHandler(
+	"approveClientAction",
+	async (actionString: string, relyingParty?: string, userName?: string) => {
+		console.log(actionString, relyingParty, userName);
+		return true;
+	},
+);
 
-// registerHandler("update", identities.update);
+registerHandler("update", update);
 
-registerHandler("logIn", async (d) => {
-    LogDebug(d);
-    return false
+registerHandler(
+	"logIn",
+	async (vaultType: string, vaultData: string, email: string) => {
+		return false;
+	},
+);
+
+registerHandler("createNewVault", async () => {
+	console.log("TEST");
+	return [ACCOUNT_VAULT_TYPE, false];
 });
-
-// registerHandler("createNewVault", createNewVault);
 
 registerHandler("getPassphrase", async () => {
-    return getPassphrase() || "";
+	return getPassphrase() || "";
 });
 
-// registerHandler("fetchRemoteVault", identities.fetchRemoteVault);
+registerHandler("fetchRemoteVault", async (d) => {
+	LogDebug(d);
+	return ["", ""];
+});
 
-// registerHandler("storeRemoteVault", identities.storeRemoteVault);
+registerHandler("storeRemoteVault", async (d) => {
+	LogDebug("Stored");
+	LogDebug(d);
+});
 
-// registerHandler("getUserEmail", async () => {
-//     const email = await supabase.getEmail();
-//     if (!email) {
-//         LogError(
-//             "Getting user email when there is no user email to get (maybe not logged in?)"
-//         );
-//     }
-//     return email || "";
-// });
+registerHandler("getUserEmail", async () => {
+	const email = "example@example.com";
+	if (!email) {
+		LogError(
+			"Getting user email when there is no user email to get (maybe not logged in?)",
+		);
+	}
+	return email || "";
+});
