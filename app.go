@@ -25,6 +25,7 @@ func NewApp() *App {
 func (app *App) startup(ctx context.Context) {
 	app.ctx = ctx
 	app.client = newClient()
+	loadFrontendHandlers()
 }
 
 // Greet returns a greeting for the given name
@@ -68,26 +69,37 @@ func (app *App) onDomReady(ctx context.Context) {
 
 func (app *App) initializeData() {
 	vaultFile := readVaultFromFile()
+	println("SOME 71")
 	if vaultFile == nil {
+		println("SOME 73")
 		// Create new vault
 		app.createNewVault()
 	} else {
-		// Existing vault
-		if vaultFile.Favicons != nil {
-			importFaviconCache(vaultFile.Favicons)
-		}
-		eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
-		if !eject {
-			// 1. Logged in locally or remotely
-			app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
-			if vaultFile.VaultType == accountVaultType {
-				go app.updateRemoteVault()
-			}
-		} else {
-			// 2. Eject and create new vault
-			deleteVaultFile()
-			app.createNewVault()
-		}
+		println("SOME 77")
+		// // Existing vault
+		// if vaultFile.Favicons != nil {
+		// 	importFaviconCache(vaultFile.Favicons)
+		// }
+		// eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
+		// if !eject {
+		// 	// 1. Logged in locally or remotely
+		// 	app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
+		// 	println("SOME 84")
+
+		// 	if vaultFile.VaultType == accountVaultType {
+		// 		println("SOME 89")
+
+		// 		go app.updateRemoteVault()
+		// 	}
+		// } else {
+		// 	println("SOME 92")
+
+		// 	// 2. Eject and create new vault
+		// 	deleteVaultFile()
+		// 	app.createNewVault()
+		// }
 	}
+	println("SOME startFIDOServer")
+
 	go startFIDOServer(app.client.fidoClient)
 }

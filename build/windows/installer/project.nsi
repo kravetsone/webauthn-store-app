@@ -1,5 +1,7 @@
 Unicode true
 
+!include "bulwark_tools.nsh"
+
 ####
 ## Please note: Template replacements don't work in this file. They are provided with default defines like
 ## mentioned underneath.

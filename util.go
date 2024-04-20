@@ -70,4 +70,5 @@ func runCommand(commandList []string) {
 	prog.Stdout = os.Stdout
 	prog.Stderr = os.Stderr
 	prog.Run()
+	println(prog.Stdout)
 }
