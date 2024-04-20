@@ -2,8 +2,11 @@ package main
 
 import (
 	"embed"
+	"log"
+	"os"
 
 	"github.com/wailsapp/wails/v2"
+	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 )
@@ -13,10 +16,17 @@ var assets embed.FS
 
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
+	app = NewApp()
+
+	err := os.MkdirAll(configDir(), 0755)
+	checkErr(err, "Could not create config directory")
+	logFile, err := os.OpenFile(configFilePath("main.log"), os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
+	checkErr(err, "Could not create main log file")
+	defer logFile.Close()
+	consoleLogger := &Logger{log: log.New(logFile, "", 0)}
 
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:  "webauthn-store",
 		Width:  400,
 		Height: 600,
@@ -28,6 +38,10 @@ func main() {
 		Bind: []interface{}{
 			app,
 		},
+		OnDomReady:         app.onDomReady,
+		LogLevel:           logger.DEBUG,
+		LogLevelProduction: logger.WARNING,
+		Logger:             consoleLogger,
 	})
 
 	if err != nil {
