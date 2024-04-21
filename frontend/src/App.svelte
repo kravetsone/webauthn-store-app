@@ -1,22 +1,18 @@
 <script lang="ts">
-    import { Greet } from "../wailsjs/go/main/App.js";
-    import logo from "./assets/images/logo-universal.png";
     import * as identities from "./utils/identities";
 
-    let resultText = "Please enter your name below 👇";
-    let name: string;
-
-    function greet(): void {
-        Greet(name).then((result) => (resultText = result));
-        identities.listenForUpdate(console.log);
-        identities.update();
-    }
+    // function greet(): void {
+    //     identities.listenForUpdate(console.log);
+    //     identities.update();
+    // }
 </script>
 
 <main>
-    <img alt="Wails logo" id="logo" src={logo} />
-    <div class="result" id="result">{resultText}</div>
-    <div class="input-box" id="input">
+    <!-- <img alt="Wails logo" id="logo" src={logo} /> -->
+    <div class="result" id="result">
+        Воспользуйтесь авторизацией WebAuthN через ключ безопасности
+    </div>
+    <!-- <div class="input-box" id="input">
         <input
             autocomplete="off"
             bind:value={name}
@@ -24,8 +20,8 @@
             id="name"
             type="text"
         />
-        <button class="btn" on:click={greet}>Greet</button>
-    </div>
+        <!-- <button class="btn" on:click={greet}>Greet</button> -->
+    <!-- </div> --> -->
 </main>
 
 <style>

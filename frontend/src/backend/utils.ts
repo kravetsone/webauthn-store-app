@@ -12,7 +12,6 @@ export function registerHandler(
 	handler: (...data: any) => Promise<any>,
 ) {
 	EventsOn(event + "-request", (data: any[]) => {
-		LogDebug(JSON.stringify(data));
 		const responseId = data[0];
 		const args = data.slice(1);
 		handler(...args).then((responseData) => {

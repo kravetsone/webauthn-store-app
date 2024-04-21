@@ -26,10 +26,11 @@ registerHandler(
 
 registerHandler("createNewVault", async () => {
 	console.log("TEST");
-	return [ACCOUNT_VAULT_TYPE, false];
+	return [LOCAL_VAULT_TYPE, false];
 });
 
 registerHandler("getPassphrase", async () => {
+	LogDebug("WOW");
 	return getPassphrase() || "";
 });
 

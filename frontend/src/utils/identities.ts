@@ -76,6 +76,7 @@ export async function deleteIdentity(id: Uint8Array) {
 
 export async function storeRemoteVault(jsonData: string, lastUpdated: string) {
 	console.log(jsonData, lastUpdated);
+	await storeRemoteVault(jsonData, lastUpdated);
 	// const userResponse = await supabase.auth.getUser();
 	// const user = userResponse.data.user;
 	// if (!user) {
