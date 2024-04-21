@@ -7,24 +7,21 @@
     import MdiImageOff from "./lib/icons/MdiImageOff.svelte";
     import MdiKey from "./lib/icons/MdiKey.svelte";
     import MdiLock from "./lib/icons/MdiLock.svelte";
-    import { setStage, stage } from "./stores";
+    import type { Identity } from "./proto";
+    import { identities, setStage, stage } from "./stores";
+    import { bytesToBase64 } from "./utils/helpers";
 
     // biome-ignore lint/style/useConst: <explanation>
     let modal = false;
     // biome-ignore lint/style/useConst: <explanation>
+    let selectedProfile: (Identity & { icon: string }) | null = null;
+    // biome-ignore lint/style/useConst: <explanation>
     let consent = false;
-
-    const profiles = [
-        {
-            website: "webauthn.io",
-            party: "kravets",
-        },
-    ];
 </script>
 
 {#if !!modal || !!consent}
     <div class="overlay">
-        {#if modal}
+        {#if modal && selectedProfile}
             <div class="modal">
                 <div class="modal__header">
                     <span class="modal__title"> Сведения </span>
@@ -36,7 +33,7 @@
                     </button>
                 </div>
                 <div class="modal__data">
-                    {#each [{ name: "ID", value: "5zHrAMx0sKqnGITHq4O/Dw==" }, { name: "Веб-сайт", value: "webauthn.io" }, { name: "Имя профиля", value: "nesclass" }, { name: "Ключ", value: "BCyDbrP67SJDpEee7C0Kv..." }] as entry}
+                    {#each [{ name: "ID", value: bytesToBase64(selectedProfile.id) }, { name: "Веб-сайт", value: selectedProfile.website.name }, { name: "Имя профиля", value: selectedProfile.user.displayName }, { name: "Ключ", value: bytesToBase64(selectedProfile.publicKey) }] as entry}
                         <div class="data-row">
                             <span class="data-row__name">
                                 {entry.name}
@@ -113,23 +110,27 @@
 {:else}
     <div class="content">
         {#if $stage == "profiles"}
-            {#if profiles.length == 0}
+            {#if $identities.length == 0}
                 <span class="no-profile"> Пока что здесь пусто </span>
             {:else}
-                {#each profiles as profile}
+                {#each $identities as profile}
                     <div class="profile">
-                        <MdiImageOff size="32px" color="#bbbbbb" />
+                        <img class="h-5 w-5" src={profile.icon} />
+                        <!-- <MdiImageOff size="32px" color="#bbbbbb" /> -->
                         <div class="profile__data">
                             <span class="profile__website">
-                                {profile.website}
+                                {profile.website.name}
                             </span>
                             <span class="profile__party">
-                                {profile.party}
+                                {profile.user.displayName || profile.user.name}
                             </span>
                         </div>
                         <button
                             class="profile__info"
-                            on:click={() => (modal = true)}
+                            on:click={() => {
+                                modal = true;
+                                selectedProfile = profile;
+                            }}
                         >
                             <MdiDotsHorizontal size="24px" color="#bbbbbb" />
                         </button>

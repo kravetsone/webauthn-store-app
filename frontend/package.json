@@ -25,6 +25,7 @@
     "dependencies": {
         "@protobuf-ts/plugin": "^2.9.4",
         "class-variance-authority": "^0.7.0",
+        "effector": "^23.2.0",
         "wretch": "^2.8.1"
     }
 }
