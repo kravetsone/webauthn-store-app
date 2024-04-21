@@ -10,6 +10,7 @@
     import type { Identity } from "./proto";
     import { identities, setStage, stage } from "./stores";
     import { bytesToBase64 } from "./utils/helpers";
+    import { deleteIdentity } from "./utils/identities";
 
     // biome-ignore lint/style/useConst: <explanation>
     let modal = false;
@@ -33,7 +34,7 @@
                     </button>
                 </div>
                 <div class="modal__data">
-                    {#each [{ name: "ID", value: bytesToBase64(selectedProfile.id) }, { name: "Веб-сайт", value: selectedProfile.website.name }, { name: "Имя профиля", value: selectedProfile.user.displayName }, { name: "Ключ", value: bytesToBase64(selectedProfile.publicKey) }] as entry}
+                    {#each [{ name: "ID", value: bytesToBase64(selectedProfile.id) }, { name: "Веб-сайт", value: selectedProfile.website.name }, { name: "Имя профиля", value: selectedProfile.user.displayName }, { name: "Ключ", value: bytesToBase64(selectedProfile.publicKey) }, { name: "Количество входов", value: selectedProfile.signatureCounter }] as entry}
                         <div class="data-row">
                             <span class="data-row__name">
                                 {entry.name}
@@ -45,7 +46,13 @@
                     {/each}
                 </div>
                 <div class="modal__footer">
-                    <button class="modal__delete">
+                    <button
+                        class="modal__delete"
+                        on:click={() => {
+                            deleteIdentity(selectedProfile.id);
+                            modal = false;
+                        }}
+                    >
                         <MdiDelete size="18px" color="#EF4444" />
                         Удалить
                     </button>

@@ -166,7 +166,7 @@ func (client *FIDOClient) CreateAttestationCertificiate(privateKey *ecdsa.Privat
 		IsCA:                  false,
 		BasicConstraintsValid: true,
 	}
-	fmt.Printf("%s %s %s %s %s", rand.Reader, templateCert, client.certificateAuthority, &privateKey.PublicKey, client.certPrivateKey)
+	// fmt.Printf("%s %s %s %s %s", rand.Reader, templateCert, client.certificateAuthority, &privateKey.PublicKey, client.certPrivateKey)
 
 	// // TEMP SOLUTION
 	// privateKey, err := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)

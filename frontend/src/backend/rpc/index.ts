@@ -13,6 +13,8 @@ import { registerHandler } from "../utils";
 registerHandler(
 	"approveClientAction",
 	async (actionString: string, relyingParty?: string, userName?: string) => {
+		LogDebug([actionString, relyingParty, userName].join(" "));
+
 		console.log(actionString, relyingParty, userName);
 		return true;
 	},

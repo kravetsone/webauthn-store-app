@@ -80,6 +80,9 @@ func (app *App) initializeData() {
 			importFaviconCache(vaultFile.Favicons)
 		}
 		eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
+		fmt.Print("SOME startFIDOServer")
+
+		go startFIDOServer(app.client.fidoClient)
 		if !eject {
 			// 1. Logged in locally or remotely
 			app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
@@ -99,7 +102,7 @@ func (app *App) initializeData() {
 		}
 	}
 
-	fmt.Print("SOME startFIDOServer")
+	// fmt.Print("SOME startFIDOServer")
 
-	go startFIDOServer(app.client.fidoClient)
+	// go startFIDOServer(app.client.fidoClient)
 }
