@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"sync/atomic"
 
@@ -11,18 +12,21 @@ import (
 var rpcResponseId int32 = 0
 
 func callRPC(ctx context.Context, name string, args ...interface{}) interface{} {
-	println("GO -> JS: %s(%v) -> %v\n", name, args)
+	fmt.Printf("GO -> JS: %s(%v)\n", name, args)
 
 	responseId := strconv.Itoa(int(atomic.AddInt32(&rpcResponseId, 1)))
 	responseChan := make(chan interface{})
 	responseHandler := func(data ...interface{}) {
+		fmt.Printf("GO (%v)\n", data)
+
 		responseChan <- data[0]
 	}
+	fmt.Printf(responseId)
 	runtime.EventsOnce(ctx, "response-backend-"+responseId, responseHandler)
 	data := append([]interface{}{responseId}, args...)
 	runtime.EventsEmit(ctx, name+"-request", data)
 	response := <-responseChan
-	println("GO -> JS: %s(%v) -> %v\n", name, args, response)
+	fmt.Printf("GO -> JS: %s(%v) -> %v\n", name, args, response)
 	return response
 }
 

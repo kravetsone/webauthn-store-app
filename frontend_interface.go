@@ -4,6 +4,7 @@ import (
 	"crypto/elliptic"
 	"crypto/x509"
 	"encoding/base64"
+	"fmt"
 
 	pb "webauthn-store/proto"
 
@@ -12,7 +13,7 @@ import (
 )
 
 func updateFrontend() {
-	callRPC(app.ctx, "update")
+	// callRPC(app.ctx, "update")
 }
 
 func approveClientAction(action string, relyingParty string, userName string) bool {
@@ -25,24 +26,27 @@ func logIn(vaultType string, vaultData string, email string) bool {
 	println(vaultType, vaultData, email)
 
 	// response := false
-	response := callRPC(app.ctx, "logIn", vaultType, vaultData, email)
-	println(response)
-	return response.(bool)
-	// return false
+	// response := callRPC(app.ctx, "logIn", vaultType, vaultData, email)
+	// println(response)
+	// return response.(bool)
+	return false
 }
 
 func createNewVault() (string, bool) {
-	println("ITS A JOKE")
+	debugf("ITS A JOKE")
 	// 1st arg: vault type of new vault
 	// 2nd arg: if true, logged into remote vault instead of creating new one
-	response := callRPC(app.ctx, "createNewVault").([]interface{})
-	println("result", response[0].(string), response[1].(bool))
-	return response[0].(string), response[1].(bool)
+	return "local", false
+	// response := callRPC(app.ctx, "createNewVault").([]interface{})
+	// debugf("result ", response[0].(string), response[1].(bool))
+	// return response[0].(string), response[1].(bool)
 }
 
 func getPassphrase() string {
-	response := callRPC(app.ctx, "getPassphrase")
-	return response.(string)
+	// response := callRPC(app.ctx, "getPassphrase")
+	response := "test"
+	return response
+	// return response.(string)
 }
 
 func fetchRemoteVaultJSON() (string, string) {
@@ -51,7 +55,8 @@ func fetchRemoteVaultJSON() (string, string) {
 }
 
 func storeRemoteVaultJSON(vaultJSON string, lastUpdated string) {
-	callRPC(app.ctx, "storeRemoteVault", vaultJSON, lastUpdated)
+	fmt.Printf("STORED: %s(%s)\n", vaultJSON, lastUpdated)
+	// callRPC(app.ctx, "storeRemoteVault", vaultJSON, lastUpdated)
 }
 
 func getUserEmail() string {
