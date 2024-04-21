@@ -175,16 +175,15 @@ func (client *Client) exportSavedState() []byte {
 }
 
 func (client *Client) save() {
-	// config := client.exportSavedState()
-	config := []byte{}
+	config := client.exportSavedState()
 	vaultFile := VaultFile{VaultType: client.vaultType, Email: client.email, Data: config, LastUpdated: toTimestamp(client.lastUpdated)}
 	favicons, err := exportFaviconCache()
 	if err == nil {
 		vaultFile.Favicons = favicons
 	}
-	// saveVaultToFile(vaultFile)
-	// updateFrontend()
-	// storeRemoteVaultJSON(string(config), toTimestamp(client.lastUpdated))
+	saveVaultToFile(vaultFile)
+	updateFrontend()
+	storeRemoteVaultJSON(string(config), toTimestamp(client.lastUpdated))
 }
 
 // --------------------------

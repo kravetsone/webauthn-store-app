@@ -89,14 +89,22 @@ func (client *FIDOClient) loadConfig(config *identities.FIDODeviceConfig) {
 }
 
 func (client *FIDOClient) exportConfig() *identities.FIDODeviceConfig {
-	println(client)
-	fmt.Printf("CLIE %+v\n", client)
-	fmt.Printf("certPrivateKey %+v\n", client.certPrivateKey)
-	privateKey, err := x509.MarshalECPrivateKey(client.certPrivateKey)
-	checkErr(err, "Could not encode private key")
+	var privateKey []byte
+	var err error
+	if client.certPrivateKey != nil {
+		privateKey, err = x509.MarshalECPrivateKey(client.certPrivateKey)
+		checkErr(err, "Could not encode private key")
+	}
+
+	var attestationCertificate []byte
+
+	if client.certificateAuthority != nil {
+		attestationCertificate = client.certificateAuthority.Raw
+	}
+
 	config := identities.FIDODeviceConfig{
 		AuthenticationCounter:  client.authenticationCounter,
-		AttestationCertificate: client.certificateAuthority.Raw,
+		AttestationCertificate: attestationCertificate,
 		AttestationPrivateKey:  privateKey,
 		EncryptionKey:          client.encryptionKey,
 		PINHash:                client.pinHash,
