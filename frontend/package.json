@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@protobuf-ts/plugin": "^2.9.4",
-        "class-variance-authority": "^0.7.0"
+        "class-variance-authority": "^0.7.0",
+        "wretch": "^2.8.1"
     }
 }
