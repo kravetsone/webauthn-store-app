@@ -13,40 +13,40 @@ import (
 )
 
 func updateFrontend() {
-	// callRPC(app.ctx, "update")
+	callRPC(app.ctx, "update")
 }
 
 func approveClientAction(action string, relyingParty string, userName string) bool {
-	return true
-	// response := callRPC(app.ctx, "approveClientAction", action, relyingParty, userName)
-	// return response.(bool)
+	// return true
+	response := callRPC(app.ctx, "approveClientAction", action, relyingParty, userName)
+	return response.(bool)
 }
 
 func logIn(vaultType string, vaultData string, email string) bool {
 	println(vaultType, vaultData, email)
 
 	// response := false
-	// response := callRPC(app.ctx, "logIn", vaultType, vaultData, email)
-	// println(response)
-	// return response.(bool)
-	return false
+	response := callRPC(app.ctx, "logIn", vaultType, vaultData, email)
+	println(response)
+	return response.(bool)
+	// return false
 }
 
 func createNewVault() (string, bool) {
 	debugf("ITS A JOKE")
 	// 1st arg: vault type of new vault
 	// 2nd arg: if true, logged into remote vault instead of creating new one
-	return "local", false
-	// response := callRPC(app.ctx, "createNewVault").([]interface{})
-	// debugf("result ", response[0].(string), response[1].(bool))
-	// return response[0].(string), response[1].(bool)
+	// return "local", false
+	response := callRPC(app.ctx, "createNewVault").([]interface{})
+	debugf("result ", response[0].(string), response[1].(bool))
+	return response[0].(string), response[1].(bool)
 }
 
 func getPassphrase() string {
-	// response := callRPC(app.ctx, "getPassphrase")
-	response := "test"
-	return response
-	// return response.(string)
+	response := callRPC(app.ctx, "getPassphrase")
+	// response := "test"
+	// return response
+	return response.(string)
 }
 
 func fetchRemoteVaultJSON() (string, string) {
@@ -56,7 +56,7 @@ func fetchRemoteVaultJSON() (string, string) {
 
 func storeRemoteVaultJSON(vaultJSON string, lastUpdated string) {
 	fmt.Printf("STORED: %s(%s)\n", vaultJSON, lastUpdated)
-	// callRPC(app.ctx, "storeRemoteVault", vaultJSON, lastUpdated)
+	callRPC(app.ctx, "storeRemoteVault", vaultJSON, lastUpdated)
 }
 
 func getUserEmail() string {

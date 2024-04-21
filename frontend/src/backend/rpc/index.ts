@@ -1,10 +1,12 @@
-import { LogDebug, LogError } from "wailsjs/runtime/runtime";
+import { LogDebug, LogError } from "../../../wailsjs/runtime/runtime";
+import { setStage } from "../../stores";
 import { update } from "../../utils/identities";
 import {
 	ACCOUNT_VAULT_TYPE,
 	LOCAL_VAULT_TYPE,
 	getPassphrase,
 } from "../../utils/passphrase";
+import { signIn, signUp } from "../server";
 import { registerHandler } from "../utils";
 
 registerHandler(
@@ -20,13 +22,17 @@ registerHandler("update", update);
 registerHandler(
 	"logIn",
 	async (vaultType: string, vaultData: string, email: string) => {
+		LogDebug([vaultType, vaultData, email].join(" "));
+		await signIn(email, "test");
+		setStage("profiles");
 		return false;
 	},
 );
 
 registerHandler("createNewVault", async () => {
 	console.log("TEST");
-	return [LOCAL_VAULT_TYPE, false];
+
+	return [ACCOUNT_VAULT_TYPE, false];
 });
 
 registerHandler("getPassphrase", async () => {

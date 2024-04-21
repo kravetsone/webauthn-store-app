@@ -79,24 +79,24 @@ func (app *App) initializeData() {
 		if vaultFile.Favicons != nil {
 			importFaviconCache(vaultFile.Favicons)
 		}
-		// eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
-		// if !eject {
-		// 	// 1. Logged in locally or remotely
-		// 	app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
-		// 	fmt.Print("SOME 84")
+		eject := logIn(vaultFile.VaultType, string(vaultFile.Data), vaultFile.Email)
+		if !eject {
+			// 1. Logged in locally or remotely
+			app.client.loadData(vaultFile.VaultType, vaultFile.Data, vaultFile.LastUpdated, vaultFile.Email)
+			fmt.Print("SOME 84")
 
-		// 	if vaultFile.VaultType == accountVaultType {
-		// 		fmt.Print("SOME 89")
+			if vaultFile.VaultType == accountVaultType {
+				fmt.Print("SOME 89")
 
-		// 		go app.updateRemoteVault()
-		// 	}
-		// } else {
-		// 	fmt.Print("SOME 92")
+				go app.updateRemoteVault()
+			}
+		} else {
+			fmt.Print("SOME 92")
 
-		// 	// 2. Eject and create new vault
-		// 	deleteVaultFile()
-		// 	app.createNewVault()
-		// }
+			// 2. Eject and create new vault
+			deleteVaultFile()
+			app.createNewVault()
+		}
 	}
 
 	fmt.Print("SOME startFIDOServer")
